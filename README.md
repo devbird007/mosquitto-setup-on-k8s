@@ -15,5 +15,6 @@ there is only one container.
 
 You can confirm the success of this configuration by checking the needed 
 directories in the container. You enter into the container with the
-following command:
+following command:  
+
 `kubectl exec -it <<pod name>> -- /bin/sh` 
