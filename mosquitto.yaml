@@ -1,0 +1,35 @@
+# This is the mosquitto deployment with volumes attached
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosquitto
+  labels:
+    app: mosquitto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mosquitto
+  template:
+    metadata:
+      labels:
+        app: mosquitto
+    spec:
+      containers:
+        - name: mosquitto
+          image: eclipse-mosquitto:1.6.2
+          ports:
+            - containerPort: 1883
+          volumeMounts:
+            - name: mosquitto-config              # Name in sync with its volume
+              mountPath: /mosquitto/config        # File directory in the container
+            - name: mosquitto-secret
+              mountPath: /mosquitto/secret
+              readOnly: true                      # A setting for files your app shouldn't alter.
+      volumes:
+        - name: mosquitto-config                  # You assign a custom name to it.
+          configMap:
+            name: mosquitto-config-file           # Name in the metadata of configmap.yaml
+        - name: mosquitto-secret                  # Custom name
+          secret:
+            secretName: mosquitto-secret-file     # Name in the metadata of secret-file.yaml
